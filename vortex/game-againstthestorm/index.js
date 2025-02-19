@@ -14,16 +14,37 @@ const VIEW_NAME = 'Against The Storm';
 // 以下処理.
 //-----------------------------------.
 
+// Mod配置パス.
+const MOD_PATH='BepInEx/plugins';
+
 // Imports.
 path = require('path'); 
 const { log, util } = require('vortex-api'); 
 const winapi = require('winapi-bindings'); 
 const fs = require('fs-extra');
+const { exec } = require('child_process');
+
+
+function setChmod(dir) {
+  return fs.chmod(dir, 0o777)
+    .then(() => new Promise((resolve, reject) => {
+        exec(`icacls "${dir}" /grant Everyone:F /T /C`, (error, stdout, stderr) => {
+            if (error) {
+                console.error(`権限変更エラー: ${error}`);
+                reject(error);
+            } else {
+                console.log('アクセス権限を変更しました:', stdout);
+                resolve();
+            }
+        });
+  }));
+}
 
 //---.
 // ゲーム検索.
 //---.
-function findGame() { 
+async function findGame() { 
+  var ret = "";
   try { 
     const instPath = winapi.RegGetValue( 
       'HKEY_LOCAL_MACHINE', 
@@ -32,33 +53,47 @@ function findGame() {
     if (!instPath) { 
       throw new Error('empty registry key'); 
     } 
-    return Promise.resolve(instPath.value); 
+
+    // Modフォルダが存在しなかったら作成しておく.
+      ret = instPath.value; 
   } catch (err) { 
-    return util.GameStoreHelper.findByAppId([STEAMAPP_ID, GOGAPP_ID]) 
-      .then(game => game.gamePath); 
+      ret = await util.GameStoreHelper.findByAppId([STEAMAPP_ID, GOGAPP_ID]).then(game => game.gamePath); 
   } 
+  var modFullPath = path.join(ret, MOD_PATH);
+  fs.ensureDirSync(modFullPath);
+  await setChmod(modFullPath);
+  s_IsCreatedModPath = true;
+  return ret;
 }
+
+function findModPath(){
+  return MOD_PATH;
+}
+
+
 
 //---.
 // Mod環境のセットアップ.
 // BepInExフォルダの用意.
 //---.
-async function prepareForModding(discovery, api) {
-  //return fs.ensureDirWritableAsync(path.join(discovery.path, 'BepInEx', 'plugins'));
-  const targetPath = path.join(discovery.path, 'BepInEx');
-  const sourcePath = path.join(__dirname,'BepInEx');
-  
-  try {
-      // BepInEx フォルダが存在しない場合にコピー
-      if (!(fs.existsSync(targetPath))) {
-          return fs.copy(sourcePath, targetPath);
-        } else {
-          console.log('BepInEx フォルダは既に存在します。');
-        }
-    } catch (error) {
-        console.error('エラーが発生しました:', error);
-    }
+function prepareForModding(discovery, api) {
+  const targetPath = discovery.path;
+  const sourcePath = path.join(__dirname, 'BepInEx');
+
+  return fs.readdir(sourcePath)
+      .then(items => {
+          const copyPromises = items.map(
+            item => {
+              const src = path.join(sourcePath, item);
+              const dest = path.join(targetPath, item);
+              return fs.copy(src, dest)
+                  .then(() => setChmod(dest));
+            }
+          );
+          return Promise.all(copyPromises);
+      });
 }
+
 
 //-----
 // Modがサポートされているかチェック.
@@ -112,20 +147,23 @@ function installContent(files) {
 // Main関数.
 //-----
 function main(context) { 
+  //先にqueryModPathだけ作っておく.
+  //fs.ensureDirSync(path.join(discovery.path, 'BepInEx', 'plugins'));
+
 	//これは、ゲーム拡張機能を検出したときにVortexが実行するメイン関数です.
 	context.registerGame({ 
         id: GAME_ID, 
         name: VIEW_NAME, 
         mergeMods: true, 
+        setup: prepareForModding, 
         queryPath: findGame, 
         supportedTools: [], 
-        queryModPath: () => 'BepInEx/plugins', 
+        queryModPath: findModPath, 
         logo: 'gameart.jpg', 
         executable: () => 'Against the Storm.exe', 
         requiredFiles: [ 
           'Against the Storm.exe', 
         ], 
-        setup: prepareForModding, 
         environment: { 
           SteamAPPId: STEAMAPP_ID, 
         }, 

@@ -8,14 +8,21 @@ Vortexの拡張機能を誰も作ってなかったので作った。
 https://www.nexusmods.com/about/vortex  
 
 # インストールほうほう
-1. Vortexをインストールして
+1. Vortexをインストールして、一回起動してまた閉じて
 2. AppData\Roaming\Vortex\plugins 以下にgame-againstthestormフォルダをそのまま放り込んで
 3. Vortexを起動すると
 4. 普通にVortexのGames上に「Against The Storm」という名前で出てくるので
 5. それをManagedでいつも通りVortexっぽく使える
 
+ちなみに2は同梱の「deploy_local.bat」を叩くことでも出来る。  
+
 # せつめい
 なんかようわからんが↓に書いてあった方法で追加した。  
 大体コピペだけど、ゲームIDとかをちょろっと書き換えたり、prepareForModding()でBepInExのコピーを走らせたりだけ変えてる。   
 https://github.com/Nexus-Mods/Vortex/wiki/MODDINGWIKI-Developers-General-Creating-a-game-extension  
+
+# インストールほうほうの補足
+vortexの拡張機能はシンボリックリンクは対応してないっぽいので注意。  
+ジャンクションも駄目だった。  
+そのためdeploy_local.batではxcopyで直ファイルコピーしている。  
 
