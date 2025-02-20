@@ -109,39 +109,27 @@ function testSupportedContent(files, gameId) {
 //-----
 // Modをインストール.
 //-----
-function installContent(files) { 
-  /*
-  const rootPath = path.dirname(files[0]); 
-  const filtered = files.filter(file => file.indexOf(rootPath) !== -1); 
-  const instructions = filtered.map(file => { 
-    return { 
-      type: 'copy', 
-      source: file, 
-      destination: path.join(rootPath, file), 
-    }; 
-  }); 
+function installContent(files, destinationRoot) {
+  const modFolderName = path.basename(destinationRoot).replace(/\.installing$/, "");
+  const rootPath = path.dirname(files[0]);
 
-  return Promise.resolve({ instructions }); 
-  */
- const modFile = files[0];
- const idx = modFile.indexOf(path.basename(modFile));
- const rootPath = path.dirname(modFile);
- 
- // Remove directories and anything that isn't in the rootPath.
- const filtered = files.filter(file => 
-   ((file.indexOf(rootPath) !== -1) 
-   && (!file.endsWith(path.sep))));
+  const filtered = files.filter(file => 
+    ((file.indexOf(rootPath) !== -1) 
+    && (!file.endsWith(path.sep))));
 
- const instructions = filtered.map(file => {
-   return {
-     type: 'copy',
-     source: file,
-     destination: path.join(file.substr(idx)),
-   };
- });
-
- return Promise.resolve({ instructions });
+  const instructions = filtered.map(file => {
+    const destPath = path.join(modFolderName, file);
+    console.log(destPath);
+    return {
+      type: 'copy',
+      source: file,
+      destination: destPath,
+    };
+  });
+  return Promise.resolve({ instructions });
 }
+
+
 
 //-----
 // Main関数.
