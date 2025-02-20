@@ -217,5 +217,7 @@ ModelManifest.xml
 RunLicense_WEBCS.config
 .svn*
 
-game_body
+game_dlls
+game_bepinex
 src/Lib
+*.zip*

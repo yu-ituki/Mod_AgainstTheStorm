@@ -119,7 +119,6 @@ function installContent(files, destinationRoot) {
 
   const instructions = filtered.map(file => {
     const destPath = path.join(modFolderName, file);
-    console.log(destPath);
     return {
       type: 'copy',
       source: file,

@@ -220,3 +220,4 @@ RunLicense_WEBCS.config
 game_dlls
 game_bepinex
 src/Lib
+*.zip*
