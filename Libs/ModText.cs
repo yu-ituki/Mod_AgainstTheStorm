@@ -19,6 +19,12 @@ namespace Mod
 			public string text_CN;
 			public string text_ZHTW;
 			public string text_KR;
+			public string text_IT;
+			public string text_ES;
+			public string text_DE;
+			public string text_FR;
+			public string text_RU;
+
 
 			[NonSerialized]
 			public eTextID textID;
@@ -61,6 +67,11 @@ namespace Mod
 			case eLanguage.ZH_CN: ret = row.text_CN; break;
 			case eLanguage.ZH_TW: ret = row.text_ZHTW; break;
 			case eLanguage.KO: ret = row.text_KR; break;
+			case eLanguage.ES: ret = row.text_ES; break;
+			case eLanguage.DE: ret = row.text_DE; break;
+			case eLanguage.IT: ret = row.text_IT; break;
+			case eLanguage.FR: ret = row.text_FR; break;
+			case eLanguage.RU: ret = row.text_RU; break;
 			default: ret = row.text_EN; break;
 			};
 			if (string.IsNullOrEmpty(ret))
