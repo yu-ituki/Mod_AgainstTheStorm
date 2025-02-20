@@ -147,7 +147,7 @@ function main(context) {
         queryPath: findGame, 
         supportedTools: [], 
         queryModPath: findModPath, 
-        logo: 'gameart.jpg', 
+        logo: 'gameart.png', 
         executable: () => 'Against the Storm.exe', 
         requiredFiles: [ 
           'Against the Storm.exe', 
