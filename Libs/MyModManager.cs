@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BepInEx;
 
+using Eremite;
 using Eremite.Controller;
 using Eremite.Controller.Generator;
 using Eremite.Services;
@@ -74,6 +75,31 @@ namespace Mod
 
 			m_Harmony = new Harmony(modFullName);
 			m_Harmony.PatchAll();
+
+			RegisterOnBootAction(
+				() => {
+					eLanguage lang = _CalcCurrentLanguage();
+					ModTextManager.Instance.Initialize(lang);
+				}
+			);
+		}
+
+		eLanguage _CalcCurrentLanguage() {
+			var locaCode = MainController.Instance?.AppServices?.TextsService?.CurrentLocaCode;
+			switch ( locaCode ) {
+				case "ja":  return eLanguage.JP; //日本語.
+				case "en":  return eLanguage.EN;//英語.
+				case "zh-CN":  return eLanguage.ZH_CN;//中国語(簡体字).
+				case "zh-TW":  return eLanguage.ZH_TW; //中国語(繁体字).
+				case "ko":  return eLanguage.KO;//韓国語.
+				case "it":  return eLanguage.IT; //イタリア語.
+				case "es":  return eLanguage.ES; //スペイン語.
+				case "de":  return eLanguage.DE; //ドイツ語.
+				case "fr":  return eLanguage.FR; //フランス語.
+				case "pt":  return eLanguage.PT; //ポルトガル語.
+				case "ru":  return eLanguage.RU; //ロシア語.
+				default: return eLanguage.EN;
+			}
 		}
 
 		/// <summary>

@@ -49,6 +49,9 @@
       <HintPath>.\..\game_bepinex\core\BepInEx.Harmony.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
@@ -78,6 +81,10 @@
       <HintPath>.\..\game_dlls\Managed\UnityEngine.UI.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="UnityEngine.JSONSerializeModule.dll">
+      <HintPath>.\..\game_dlls\Managed\UnityEngine.JSONSerializeModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Assembly-CSharp.dll">
       <HintPath>.\..\game_dlls\Managed\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
@@ -89,15 +96,10 @@
     <Compile Include="ModConfig.cs" />
     <Compile Include="ModInfo.cs" />
     <Compile Include="Plugin.cs" />
-    <Compile Include="Lib\CommonUtil.cs" />
-    <Compile Include="Lib\DebugUtil.cs" />
-    <Compile Include="Lib\eLanguage.cs" />
-    <Compile Include="Lib\GameUtil.cs" />
-    <Compile Include="Lib\ModConfigBase.cs" />
-    <Compile Include="Lib\ModInput.cs" />
-    <Compile Include="Lib\MonoSingleton.cs" />
-    <Compile Include="Lib\MyModManager.cs" />
-    <Compile Include="Lib\Singleton.cs" />
+    <Compile Include="Lib\*" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
