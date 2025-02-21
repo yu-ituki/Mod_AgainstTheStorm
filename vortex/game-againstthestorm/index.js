@@ -8,7 +8,7 @@ const STEAMAPP_ID = '1336490';
 //GOG アプリケーション ID。https://www.gogdb.org/ から取得できます。
 const GOGAPP_ID = '1460447406';
 // 拡張機能の表示名.
-const VIEW_NAME = 'Against The Storm';
+const VIEW_NAME = 'Against the Storm';
 
 //-----------------------------------.
 // 以下処理.
@@ -160,7 +160,7 @@ function main(context) {
         }, 
       });
   
-  context.registerInstaller('againstthestorm-mod', 25, testSupportedContent, installContent);
+  context.registerInstaller(GAME_ID, 25, testSupportedContent, installContent);
 	return true 
 } 
 
